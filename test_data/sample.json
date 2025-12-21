@@ -1,0 +1,25 @@
+{
+  "technologies": {
+    "programming_languages": [
+      {
+        "name": "Python",
+        "type": "interpreted",
+        "use_cases": ["web development", "data science", "automation"]
+      },
+      {
+        "name": "Rust",
+        "type": "compiled",
+        "use_cases": ["systems programming", "web assembly", "performance critical applications"]
+      }
+    ],
+    "databases": {
+      "relational": ["PostgreSQL", "MySQL"],
+      "nosql": ["MongoDB", "Redis"]
+    },
+    "frameworks": {
+      "web": ["FastAPI", "Django", "Flask"],
+      "ml": ["TensorFlow", "PyTorch"]
+    }
+  }
+}
+

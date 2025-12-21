@@ -1,0 +1,11 @@
+Retrieval-Augmented Generation (RAG) is a technique that enhances large language models by incorporating external knowledge sources. 
+
+The RAG pipeline typically consists of three main components:
+1. Data Ingestion: Collecting and processing data from various sources
+2. Vector Storage: Converting documents into embeddings and storing them in a vector database
+3. Retrieval and Generation: Finding relevant context and generating responses based on that context
+
+RAG systems are particularly useful when you need to provide accurate, up-to-date information that may not be in the model's training data. They combine the generative capabilities of LLMs with the precision of information retrieval systems.
+
+The key advantage of RAG is that it allows models to access and cite specific sources, making responses more trustworthy and verifiable.
+

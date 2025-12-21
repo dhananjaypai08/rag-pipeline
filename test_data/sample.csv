@@ -1,0 +1,7 @@
+id,name,description,category
+1,Python,High-level programming language,Programming
+2,JavaScript,Scripting language for web development,Programming
+3,SQL,Structured Query Language for databases,Database
+4,Redis,In-memory data structure store,Database
+5,Docker,Containerization platform,DevOps
+
