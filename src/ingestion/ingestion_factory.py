@@ -3,6 +3,7 @@ from src.ingestion.base_ingester import BaseIngester
 from src.ingestion.csv_ingester import CSVIngester
 from src.ingestion.json_ingester import JSONIngester
 from src.ingestion.text_ingester import TextIngester
+from src.ingestion.html_ingester import HTMLIngester
 from src.ingestion.database_ingester import DatabaseIngester
 from src.models import DataSourceType
 
@@ -12,6 +13,7 @@ class IngestionFactory:
         DataSourceType.CSV: CSVIngester,
         DataSourceType.JSON: JSONIngester,
         DataSourceType.TEXT: TextIngester,
+        DataSourceType.HTML: HTMLIngester,
         DataSourceType.JSON_SCHEMA: JSONIngester,
     }
 

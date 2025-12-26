@@ -1,6 +1,9 @@
 from typing import List
+import logging
 from src.models import Document
 from src.config import settings
+
+logger = logging.getLogger(__name__)
 
 
 class ChunkingService:
@@ -44,16 +47,23 @@ class ChunkingService:
                     )
                 )
 
-            start = end - self.chunk_overlap
+            new_start = end - self.chunk_overlap
+            if new_start <= start:
+                new_start = end
+            start = new_start
+
             if start >= content_length:
                 break
 
         return chunks
 
     def chunk_documents(self, documents: List[Document]) -> List[Document]:
+        logger.info(f"Chunking {len(documents)} documents (chunk_size={self.chunk_size}, overlap={self.chunk_overlap})")
         all_chunks = []
-        for document in documents:
+        for i, document in enumerate(documents, 1):
             chunks = self.chunk_document(document)
             all_chunks.extend(chunks)
+            logger.info(f"Document {i}/{len(documents)}: created {len(chunks)} chunks")
+        logger.info(f"Chunking complete: {len(all_chunks)} total chunks")
         return all_chunks
 

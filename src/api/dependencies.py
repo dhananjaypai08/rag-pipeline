@@ -1,3 +1,4 @@
+import logging
 from src.services.embedding_service import EmbeddingService
 from src.services.vector_store import VectorStore
 from src.services.llm_service import LLMService
@@ -5,6 +6,8 @@ from src.services.chunking_service import ChunkingService
 from src.pipeline.rag_pipeline import RAGPipeline
 from src.pipeline.ingestion_pipeline import IngestionPipeline
 from src.config import settings
+
+logger = logging.getLogger(__name__)
 
 
 _embedding_service: EmbeddingService | None = None
@@ -27,6 +30,8 @@ def get_vector_store() -> VectorStore:
     if _vector_store is None:
         _vector_store = VectorStore()
         embedding_service = get_embedding_service()
+        if not embedding_service:
+            return _vector_store
         _vector_store.initialize_collection(embedding_service.get_dimension())
     return _vector_store
 
@@ -59,10 +64,12 @@ def get_rag_pipeline() -> RAGPipeline:
 def get_ingestion_pipeline() -> IngestionPipeline:
     global _ingestion_pipeline
     if _ingestion_pipeline is None:
+        logger.info("Initializing ingestion pipeline and required services...")
         _ingestion_pipeline = IngestionPipeline(
             chunking_service=get_chunking_service(),
             embedding_service=get_embedding_service(),
             vector_store=get_vector_store(),
         )
+        logger.info("Ingestion pipeline initialized successfully")
     return _ingestion_pipeline
 

@@ -16,4 +16,11 @@ psycopg2-binary>=2.9.10
 pymysql>=1.1.1
 typing-extensions>=4.12.0
 requests>=2.32.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+python-multipart>=0.0.6
 
+
+# Optional: LLM Provider APIs (uncomment to use)
+# openai>=1.0.0
+# anthropic>=0.18.0

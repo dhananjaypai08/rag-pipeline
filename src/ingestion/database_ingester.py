@@ -17,7 +17,16 @@ class DatabaseIngester(BaseIngester):
         self.table_name = table_name
         self.query = query
 
-    def ingest(self, source_path: str, metadata: Dict[str, Any]) -> List[Document]:
+    def ingest(
+        self,
+        source_path: Optional[str] = None,
+        content: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None
+    ) -> List[Document]:
+        """Ingest data from database. source_path and content parameters are not used."""
+        if metadata is None:
+            metadata = {}
+
         if self.query:
             return self._ingest_from_query(self.query, metadata)
         elif self.table_name:

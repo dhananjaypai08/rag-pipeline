@@ -1,38 +1,45 @@
 from typing import List, Dict, Any, Optional
+from bs4 import BeautifulSoup
 from src.ingestion.base_ingester import BaseIngester
 from src.models import Document
 
 
-class TextIngester(BaseIngester):
+class HTMLIngester(BaseIngester):
     def ingest(
         self,
         source_path: Optional[str] = None,
         content: Optional[str] = None,
         metadata: Optional[Dict[str, Any]] = None
     ) -> List[Document]:
-        """Ingest text from either a file path or direct content."""
         if metadata is None:
             metadata = {}
 
-        # Get text content from either source
         if content is not None:
-            text_content = content
-            source = "direct_text_input"
+            html_content = content
+            source = "direct_html_input"
         elif source_path is not None:
             with open(source_path, "r", encoding="utf-8") as f:
-                text_content = f.read()
+                html_content = f.read()
             source = source_path
         else:
             raise ValueError("Either source_path or content must be provided")
 
+        soup = BeautifulSoup(html_content, 'lxml')
+
+        for script in soup(["script", "style"]):
+            script.decompose()
+
+        text = soup.get_text(separator='\n', strip=True)
+        lines = (line.strip() for line in text.splitlines())
+        text = '\n'.join(line for line in lines if line)
+
         doc_metadata = metadata.copy()
-        doc_metadata["file_type"] = "text"
+        doc_metadata["file_type"] = "html"
 
         return [
             Document(
-                content=text_content,
+                content=text,
                 metadata=doc_metadata,
                 source=source,
             )
         ]
-

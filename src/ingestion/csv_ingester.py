@@ -1,12 +1,30 @@
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
+from io import StringIO
 import pandas as pd
 from src.ingestion.base_ingester import BaseIngester
 from src.models import Document
 
 
 class CSVIngester(BaseIngester):
-    def ingest(self, source_path: str, metadata: Dict[str, Any]) -> List[Document]:
-        df = pd.read_csv(source_path)
+    def ingest(
+        self,
+        source_path: Optional[str] = None,
+        content: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None
+    ) -> List[Document]:
+        """Ingest CSV from either a file path or direct content."""
+        if metadata is None:
+            metadata = {}
+
+        # Load CSV data from either source
+        if content is not None:
+            df = pd.read_csv(StringIO(content))
+            source = "direct_csv_input"
+        elif source_path is not None:
+            df = pd.read_csv(source_path)
+            source = source_path
+        else:
+            raise ValueError("Either source_path or content must be provided")
         documents = []
 
         for idx, row in df.iterrows():
@@ -22,7 +40,7 @@ class CSVIngester(BaseIngester):
                 Document(
                     content=content,
                     metadata=doc_metadata,
-                    source=f"{source_path}:row_{idx}",
+                    source=f"{source}:row_{idx}",
                 )
             )
 

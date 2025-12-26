@@ -32,3 +32,6 @@ htmlcov/
 .dmypy.json
 dmypy.json
 
+test_data/messages.html
+test_data/messages2.html
+research/LLM_HOSTING_EVALUATION.md

@@ -1,16 +1,33 @@
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import json
 from src.ingestion.base_ingester import BaseIngester
 from src.models import Document
 
 
 class JSONIngester(BaseIngester):
-    def ingest(self, source_path: str, metadata: Dict[str, Any]) -> List[Document]:
-        with open(source_path, "r", encoding="utf-8") as f:
-            data = json.load(f)
+    def ingest(
+        self,
+        source_path: Optional[str] = None,
+        content: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None
+    ) -> List[Document]:
+        """Ingest JSON from either a file path or direct content."""
+        if metadata is None:
+            metadata = {}
+
+        # Load JSON data from either source
+        if content is not None:
+            data = json.loads(content)
+            source = "direct_json_input"
+        elif source_path is not None:
+            with open(source_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            source = source_path
+        else:
+            raise ValueError("Either source_path or content must be provided")
 
         documents = []
-        self._process_json_data(data, source_path, metadata, documents, "")
+        self._process_json_data(data, source, metadata, documents, "")
         return documents
 
     def _process_json_data(
